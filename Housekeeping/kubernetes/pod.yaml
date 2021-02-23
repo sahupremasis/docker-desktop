@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: housekeeping-hello-python
+spec:
+  volumes:
+  - name: task-pv-storage
+    persistentVolumeClaim:
+      claimName: task-pv-claim
+  containers:
+  - name: housekeeping-hello-python
+    image: housekeeping-hello-python:latest
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - mountPath: "/hellopython"
+      name: task-pv-storage
+

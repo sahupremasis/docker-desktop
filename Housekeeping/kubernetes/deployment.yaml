@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: housekeeping-hello-python
+spec:
+  selector:
+    matchLabels:
+      app: housekeeping-hello-python
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: housekeeping-hello-python
+    spec:
+      containers:
+      - name: housekeeping-hello-python
+        image: housekeeping-hello-python:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+        volumeMounts:
+        - mountPath: "/hellopython"
+          name: task-pv-storage
+      volumes:
+      - name: task-pv-storage
+        persistentVolumeClaim:
+          claimName: task-pv-claim

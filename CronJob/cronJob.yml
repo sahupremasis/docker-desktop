@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-db
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-fingerprints
+              image: housekeeping-hello-python:latest
+              command: ["/bin/bash"]
+              args:
+                [
+                  "-c",
+                  "echo started; sh /app/housekeepHelloPython.sh"
+                ]
+              volumeMounts:
+                - name: task-pv-volume
+                  mountPath: "/hellopython"
+              imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure
+          volumes:
+            - name: task-pv-volume
+              persistentVolumeClaim:
+                claimName: task-pv-claim
+
